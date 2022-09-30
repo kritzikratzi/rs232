@@ -44,7 +44,6 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-#define __USE_SVID // For strdup
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -250,7 +249,8 @@ void _AppendDevices(const char * base)
         if (strlen(dp->d_name) >= baseLen) {
             if (memcmp(base, dp->d_name, baseLen) == 0) {
                 COMDevice * com = &comDevices[noDevices ++];
-                com->port = (char *) strdup(dp->d_name);
+                com->port = (char *) malloc(strlen(dp->d_name) + 1);
+                strcpy(com->port, dp->d_name);
                 com->handle = -1;
             }
         }
